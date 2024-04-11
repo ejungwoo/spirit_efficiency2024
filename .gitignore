@@ -1,2 +1,4 @@
+core-root.exe*
+data/
 *.root
 tt_*/

@@ -91,7 +91,8 @@ void make_test_track_trees()
                         ofstream generatorFile(fileName);
                         generatorFile << Form("NEvent        %d", numEventsPerBin) << endl;
                         generatorFile << Form("Momentum3     %.4f %.4f %.4f", px, py, pz) << endl;
-                        generatorFile << Form("VertexFile    VertexLocationEmbedding2024.txt") << endl;
+                        //generatorFile << Form("VertexFile    VertexLocationEmbedding2024.txt") << endl;
+                        generatorFile << Form("VertexFile    VertexLocation.txt") << endl;
                         generatorFile << Form("Particle      %d", pdg) << endl;
                     }
                 }

@@ -1,25 +1,25 @@
-//#include <sys/stat.h>
-//#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /*************************************************************
 * Functions needed to create directory if it is non-existance*
 * Only call recursive_mkdir. There's no need to call rek_mkdir   *
 **************************************************************/
-//void rek_mkdir(char* path);
-//void recursive_mkdir(const char* t_path);
+void rek_mkdir(char* path);
+void recursive_mkdir(const char* t_path);
 //************End of Directory creation function****************
 
-//void AddIons(FairRunSim *fRun, TString event);
+void AddIons(FairRunSim *fRun, TString event);
 
 void run_mc
 (
-    //TString name  = "run_for_embedding_2024",
-    //int     nEvent = -1,
-    //TString inputDir = "",
-    //TString outputDir = "data/",
-    //bool    useFieldMapFile = kTRUE,
-    //TString parName = "tt_system108/pid0/gen_n1333__108_0__0_1_2.txt",
-    //int     nSplit=0
+    TString name  = "run_for_embedding_2024",
+    int     nEvent = -1,
+    TString inputDir = "",
+    TString outputDir = "data/",
+    bool    useFieldMapFile = kTRUE,
+    TString parName = "tt_system132/pid0/gen_n1333__132_0__0_1_1.txt",
+    int     nSplit=0
 )
 {
     //////////////////////////////////////////////////////////
@@ -29,15 +29,12 @@ void run_mc
     //////////////////////////////////////////////////////////
 
 
-    return;
-    /*
     // -----------------------------------------------------------------
     // Set environment
     TString workDir   = gSystem -> Getenv("VMCWORKDIR");
     TString geomDir   = workDir + "/geometry";
     TString g4ConfDir = workDir + "/gconfig";
     TString dataDir   = workDir + "/macros/data/";
-    TString parDir    = "/home/ejungwoo/efficiency/";
 
     if(outputDir.IsNull())
         outputDir = dataDir;
@@ -122,7 +119,7 @@ void run_mc
        //fEvent->SetPrimaryVertex(TVector3(0.,-21.33,-.89));
 
     auto fEvent = new STSingleTrackGenerator();
-    fEvent->ReadConfig((parDir + parName).Data());
+    fEvent->ReadConfig(parName.Data());
     fEvent->SetVertexBegin(nSplit);
     //fEvent->SetCocktailEvent(300.);
     //fEvent->SetUniformRandomDirection(true);
@@ -137,6 +134,7 @@ void run_mc
     // Set data base
     FairParRootFileIo* fMCPar = new FairParRootFileIo(kTRUE);
     fMCPar -> open(outParFile.Data());
+    return;
 
     FairRuntimeDb* fDb = fRun -> GetRuntimeDb();
     fDb -> setOutput(fMCPar);
@@ -164,7 +162,6 @@ void run_mc
     cout << endl << endl;
     cout << "Macro finished succesfully."  << endl << endl;
     cout << "- Output file : " << outputFile << endl << endl;
-    */
 }
 
 
@@ -185,7 +182,6 @@ void run_mc
 
 
 
-/*
 void rek_mkdir(char* path)
 {
     char *sep = strrchr(path, '/' );
@@ -257,4 +253,3 @@ void AddIons(FairRunSim *fRun, TString event)
         fRun -> AddNewIon(new FairIon(Form("%d", a) + symbol[z - 1], z, a, z));
     }
 }
-*/
