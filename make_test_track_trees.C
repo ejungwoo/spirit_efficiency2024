@@ -21,6 +21,7 @@ void make_test_track_trees()
     int pdgArray[] = {2212,1000010020,1000010030,1000020030,1000020040};
     double particleMass[] = {0.9382720813,1.8756127,2.8089211,2.8083913,3.7273793};
     double pt,px,py,pz,energy,rap,mass,alpha,beta,phi;
+    int iPt, iRap, iPhi;
     TFile *file;
     TTree *tree;
 
@@ -43,24 +44,31 @@ void make_test_track_trees()
             auto mass = particleMass[pid];
 
             gSystem -> mkdir(Form("tt_system%d/pid%d",system,pid));
-            file = new TFile(Form("tt_system%d/pid%d/mc_%d_%d.root",system,pid,system,pid),"recreate");
-            tree = new TTree("track","");
+            TString rootFileName = Form("tt_system%d/pid%d/mc_%d_%d.root",system,pid,system,pid);
+            cout << rootFileName << endl;
+
+            file = new TFile(rootFileName,"recreate");
+            tree = new TTree("track", tag + " " + system + " " + pid);
+            tree -> Branch("ipt",&iPt);
+            tree -> Branch("irap",&iRap);
+            tree -> Branch("iphi",&iPhi);
+            tree -> Branch("pt",&pt);
+            tree -> Branch("rap",&rap);
+            tree -> Branch("phi",&phi);
+            tree -> Branch("alpha",&alpha);
+            tree -> Branch("beta",&beta);
+            tree -> Branch("energy",&energy);
             tree -> Branch("px",&px);
             tree -> Branch("py",&py);
             tree -> Branch("pz",&pz);
-            tree -> Branch("rap",&rap);
-            tree -> Branch("phi",&phi);
-            tree -> Branch("phi",&phi);
 
-            TNtuple("mc","eta","px:py:pz:y");
-
-            for (auto iPt=0; iPt<numPt; ++iPt)
+            for (iPt=0; iPt<numPt; ++iPt)
             {
                 pt = ptMin + (iPt+0.5)*ptDiff;
-                for (auto iRap=0; iRap<numRap; ++iRap)
+                for (iRap=0; iRap<numRap; ++iRap)
                 {
                     rap = rapMin + (iRap+0.5)*rapDiff;
-                    for (auto iPhi=0; iPhi<numPhi; ++iPhi)
+                    for (iPhi=0; iPhi<numPhi; ++iPhi)
                     {
                         phi = phiMin + (iPhi+0.5)*phiDiff;
                         px = pt * TMath::Cos(phi);
