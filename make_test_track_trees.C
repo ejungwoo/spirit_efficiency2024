@@ -1,84 +1,96 @@
 void make_test_track_trees()
 {
-    //int numFiles = 1000000;
-    //int numEvents = 10000;
-    //int numFiles = 10;
-
+    TString tag = "n1333";
+    int numEventsPerBin = 1;
     int numPt = 3;
     int numRap = 3;
     int numPhi = 3;
 
     double ptMin = 0;
     double ptMax = 2.5;
-    double rapMin = -1;
-    double rapMax = 2.5;
+    double rapCMMin = -1;
+    double rapCMMax = 2.5;
     double phiMin = -TMath::Pi();
     double phiMax = TMath::Pi();
 
     double ptDiff = (ptMax - ptMin)/numPt;
-    double rapDiff = (rapMax - rapMin)/numRap;
     double phiDiff = (phiMax - phiMin)/numPhi;
 
     cout << "Number of events : " << numPt * numRap * numPhi << endl;
 
+    int pdgArray[] = {2212,1000010020,1000010030,1000020030,1000020040};
     double particleMass[] = {0.9382720813,1.8756127,2.8089211,2.8083913,3.7273793};
     double pt,px,py,pz,energy,rap,mass,alpha,beta,phi;
     TFile *file;
-    TNtuple *tree;
+    TTree *tree;
 
     for (auto system : {108,132})
     {
-        double beamAngle = -44.06/1000;// rad, Sn-132
-        if (system==108)
-            beamAngle = -55.19/1000;// rad, Sn-108
+        double beamAngle = -44.06/1000;
+        double rapMin = (rapCMMin + 1) * 0.383431;
+        double rapMax = (rapCMMax + 1) * 0.383431;
+        if (system==108) {
+            beamAngle = -55.19/1000;
+            rapMin = (rapCMMin + 1) * 0.365863;
+            rapMax = (rapCMMax + 1) * 0.365863;
+        }
+        double rapDiff = (rapMax - rapMin)/numRap;
+        cout << "system " << system << " : rapidity = " << rapMin << " - " << rapMax << endl;
 
         for (auto pid : {0,1,2,3,4})
         {
+            int pdg = pdgArray[pid];
             auto mass = particleMass[pid];
 
-            //for (auto iFile=0; iFile<numFiles; ++iFile)
+            gSystem -> mkdir(Form("tt_system%d/pid%d",system,pid));
+            file = new TFile(Form("tt_system%d/pid%d/mc_%d_%d.root",system,pid,system,pid),"recreate");
+            tree = new TTree("track","");
+            tree -> Branch("px",&px);
+            tree -> Branch("py",&py);
+            tree -> Branch("pz",&pz);
+            tree -> Branch("rap",&rap);
+            tree -> Branch("phi",&phi);
+            tree -> Branch("phi",&phi);
+
+            TNtuple("mc","eta","px:py:pz:y");
+
+            for (auto iPt=0; iPt<numPt; ++iPt)
             {
-                gSystem -> mkdir(Form("tt_system%d/pid%d",system,pid));
-                //file = new TFile(Form("tt_system%d/pid%d/mc_%d_%d_%06d.root",system,pid,system,pid,iFile));
-                file = new TFile(Form("tt_system%d/pid%d/mc_%d_%d.root",system,pid,system,pid),"recreate");
-                tree = new TNtuple("mc","eta","px:py:pz:y");
-
-                for (auto iPt=0; iPt<numPt; ++iPt)
+                pt = ptMin + (iPt+0.5)*ptDiff;
+                for (auto iRap=0; iRap<numRap; ++iRap)
                 {
-                    pt = ptMin + (iPt+0.5)*ptDiff;
-                    for (auto iRap=0; iRap<numRap; ++iRap)
+                    rap = rapMin + (iRap+0.5)*rapDiff;
+                    for (auto iPhi=0; iPhi<numPhi; ++iPhi)
                     {
-                        rap = rapMin + (iRap+0.5)*rapDiff;
-                        for (auto iPhi=0; iPhi<numPhi; ++iPhi)
-                        {
-                            phi = phiMin + (iPhi+0.5)*phiDiff;
-                            px = pt * TMath::Cos(phi);
-                            py = pt * TMath::Sin(phi);
+                        phi = phiMin + (iPhi+0.5)*phiDiff;
+                        px = pt * TMath::Cos(phi);
+                        py = pt * TMath::Sin(phi);
 
-                            alpha = TMath::Exp(2*rap);
-                            beta = (alpha-1)/(alpha+1);
-                            energy = sqrt((px*px+py*py+mass*mass)/(1-beta*beta));
-                            pz = beta*energy;
+                        alpha = TMath::Exp(2*rap);
+                        beta = (alpha-1)/(alpha+1);
+                        energy = sqrt((px*px+py*py+mass*mass)/(1-beta*beta));
+                        pz = beta*energy;
 
-                            TLorentzVector vec;
-                            vec.SetPxPyPzE(px,py,pz,energy);
-                            vec.RotateY(beamAngle);
+                        TLorentzVector vec;
+                        vec.SetPxPyPzE(px,py,pz,energy);
+                        vec.RotateY(beamAngle);
 
-                            cout << iPt << " " << iRap << " " << iPhi << " "
-                                << pt << " " << rap << " " << phi << " -> "
-                                << vec.Px() << " " << vec.Py() << " " << vec.Pz() << " " << vec.Rapidity() << endl;
+                        tree -> Fill();
 
-                            tree -> Fill((Float_t)(vec.Px()),
-                                    (Float_t)(vec.Py()),
-                                    (Float_t)(vec.Pz()),
-                                    (Float_t)(vec.Rapidity()));
-                        }
+                        TString fileName = Form("tt_system%d/pid%d/gen_%s__%d_%d__%d_%d_%d.txt",system,pid,tag.Data(),system,pid,iPt,iRap,iPhi);
+                        cout << fileName << setw(15) << pt << setw(15) << rap << setw(15) << px << setw(15) << py << setw(15) << pz << endl;
+
+                        ofstream generatorFile(fileName);
+                        generatorFile << Form("NEvent        %d", numEventsPerBin) << endl;
+                        generatorFile << Form("Momentum3     %.4f %.4f %.4f", px, py, pz) << endl;
+                        generatorFile << Form("VertexFile    VertexLocationEmbedding2024.txt") << endl;
+                        generatorFile << Form("Particle      %d", pdg) << endl;
                     }
                 }
-
-                file -> Write();
-                file -> Close();
             }
+
+            file -> Write();
+            file -> Close();
         }
     }
 }

@@ -1,25 +1,25 @@
-#include <sys/stat.h>
-#include <sys/types.h>
+//#include <sys/stat.h>
+//#include <sys/types.h>
 
 /*************************************************************
 * Functions needed to create directory if it is non-existance*
 * Only call recursive_mkdir. There's no need to call rek_mkdir   *
 **************************************************************/
-void rek_mkdir(char* path);
-void recursive_mkdir(const char* t_path);
+//void rek_mkdir(char* path);
+//void recursive_mkdir(const char* t_path);
 //************End of Directory creation function****************
 
-void AddIons(FairRunSim *fRun, TString event);
+//void AddIons(FairRunSim *fRun, TString event);
 
 void run_mc
 (
-    TString name  = "Run_2841_mc_low_energy",
-    int     nEvent = -1,
-    TString inputDir = "",
-    TString outputDir = "data/",
-    bool    useFieldMapFile = kTRUE,
-    TString parName = "Generator.config.par",
-    int     nSplit=0
+    //TString name  = "run_for_embedding_2024",
+    //int     nEvent = -1,
+    //TString inputDir = "",
+    //TString outputDir = "data/",
+    //bool    useFieldMapFile = kTRUE,
+    //TString parName = "tt_system108/pid0/gen_n1333__108_0__0_1_2.txt",
+    //int     nSplit=0
 )
 {
     //////////////////////////////////////////////////////////
@@ -29,6 +29,8 @@ void run_mc
     //////////////////////////////////////////////////////////
 
 
+    return;
+    /*
     // -----------------------------------------------------------------
     // Set environment
     TString workDir   = gSystem -> Getenv("VMCWORKDIR");
@@ -110,16 +112,14 @@ void run_mc
     //  fEvent -> SetPrimaryVertex(0, -21.33, -.89);
     //  fEvent -> SetAngleStep(2212, numevent, 0.5, 0., 85., 180., 180.); // (pid, #evt, p, theta_begin, theta_end, phi_begin, phi_end[deg])
 
-    /* 
-       TString inputFile = name + ".root";
-       STTransportModelEventGenerator* fEvent;
-       if(inputDir.IsNull())
-       fEvent = new STTransportModelEventGenerator(inputDir, inputFile);
-       else
-       fEvent = new STTransportModelEventGenerator(inputFile);
-       fEvent->RegisterHeavyIon();
-       fEvent->SetPrimaryVertex(TVector3(0.,-21.33,-.89));
-       */
+       //TString inputFile = name + ".root";
+       //STTransportModelEventGenerator* fEvent;
+       //if(inputDir.IsNull())
+       //fEvent = new STTransportModelEventGenerator(inputDir, inputFile);
+       //else
+       //fEvent = new STTransportModelEventGenerator(inputFile);
+       //fEvent->RegisterHeavyIon();
+       //fEvent->SetPrimaryVertex(TVector3(0.,-21.33,-.89));
 
     auto fEvent = new STSingleTrackGenerator();
     fEvent->ReadConfig((parDir + parName).Data());
@@ -164,6 +164,7 @@ void run_mc
     cout << endl << endl;
     cout << "Macro finished succesfully."  << endl << endl;
     cout << "- Output file : " << outputFile << endl << endl;
+    */
 }
 
 
@@ -184,6 +185,7 @@ void run_mc
 
 
 
+/*
 void rek_mkdir(char* path)
 {
     char *sep = strrchr(path, '/' );
@@ -255,3 +257,4 @@ void AddIons(FairRunSim *fRun, TString event)
         fRun -> AddNewIon(new FairIon(Form("%d", a) + symbol[z - 1], z, a, z));
     }
 }
+*/
