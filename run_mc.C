@@ -134,7 +134,6 @@ void run_mc
     // Set data base
     FairParRootFileIo* fMCPar = new FairParRootFileIo(kTRUE);
     fMCPar -> open(outParFile.Data());
-    return;
 
     FairRuntimeDb* fDb = fRun -> GetRuntimeDb();
     fDb -> setOutput(fMCPar);

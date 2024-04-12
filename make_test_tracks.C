@@ -1,4 +1,4 @@
-void make_test_track_trees()
+void make_test_tracks()
 {
     TString tag = "n1333";
     int numEventsPerBin = 1;
