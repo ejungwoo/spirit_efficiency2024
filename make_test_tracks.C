@@ -1,10 +1,13 @@
-void make_test_tracks()
+void make_test_tracks
+(
+    int numPt = 3,
+    int numRap = 3,
+    int numPhi = 3
+)
 {
     TString tag = "n1333";
+
     int numEventsPerBin = 1;
-    int numPt = 3;
-    int numRap = 3;
-    int numPhi = 3;
 
     double ptMin = 0;
     double ptMax = 2.5;
@@ -91,9 +94,12 @@ void make_test_tracks()
                         ofstream generatorFile(fileName);
                         generatorFile << Form("NEvent        %d", numEventsPerBin) << endl;
                         generatorFile << Form("Momentum3     %.4f %.4f %.4f", px, py, pz) << endl;
-                        //generatorFile << Form("VertexFile    VertexLocationEmbedding2024.txt") << endl;
-                        generatorFile << Form("VertexFile    VertexLocation.txt") << endl;
+                        generatorFile << Form("VertexFile    VertexLocation_run2384_cut60_n271.txt") << endl;
                         generatorFile << Form("Particle      %d", pdg) << endl;
+
+                        // submit files
+                        ofstream submit_file( Form("submit/submit_sys%d_pid%d_pt%d_rap%d_phi%d", system, pid, iPt, iRap, iPhi) );
+                        submit_file << Form("/data/RB230064/jhpark/efficiency2024/scripts/run_one.sh %d %d %d %d %d", system, pid, iPt, iRap, iPhi) << endl;
                     }
                 }
             }

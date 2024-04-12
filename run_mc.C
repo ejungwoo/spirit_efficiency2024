@@ -13,12 +13,12 @@ void AddIons(FairRunSim *fRun, TString event);
 
 void run_mc
 (
-    TString name  = "run_for_embedding_2024",
+    TString name  = "gen_n1333__132_0__0_1_2",
     int     nEvent = -1,
     TString inputDir = "",
     TString outputDir = "data/",
     bool    useFieldMapFile = kTRUE,
-    TString parName = "tt_system132/pid0/gen_n1333__132_0__0_1_1.txt",
+    TString parName = "tt_system132/pid0/gen_n1333__132_0__0_1_2.txt",
     int     nSplit=0
 )
 {
@@ -43,7 +43,7 @@ void run_mc
     // Set file names
     TString outputFile = outputDir + name + ".mc.root"; 
     TString outParFile = outputDir + name + ".params.root";
-    TString loggerFile = outputDir + "log_" + name + ".mc.txt";
+    TString loggerFile = outputDir + "log/log_" + name + ".mc.txt";
 
     // ----------------------------------------------------------------
     // Create directories for all the output if they are non-existent
@@ -84,8 +84,8 @@ void run_mc
     fRun -> AddModule(fCave);
 
     FairDetector* fSpiRIT = new STDetector("STDetector", kTRUE);
-    //fSpiRIT -> SetGeometryFileName("geomSpiRIT.root");
-    //fRun -> AddModule(fSpiRIT); 
+    fSpiRIT -> SetGeometryFileName("geomSpiRIT.root");
+    fRun -> AddModule(fSpiRIT); 
 
 
     // -----------------------------------------------------------------

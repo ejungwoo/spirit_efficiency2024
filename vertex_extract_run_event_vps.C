@@ -31,16 +31,18 @@ void extract_run_event_vpos()
     tree108 -> SetBranchAddress("isGGClose",      &isGGClose);
     tree108 -> SetBranchAddress("isTPCRecoEvent", &isTPCRecoEvent);
 
-    int multCut = 55;
+    int multCut = 60;
     tree108 -> Draw(">>lkentrylist",Form("run==2384&&multTPC>%d",multCut),"entrylist");
     auto entryList = (TEntryList*) gDirectory -> Get("lkentrylist");
     auto numEntries = entryList -> GetN();
     cout << tree108 -> GetEntries() << " " << numEntries << endl;
     tree108 -> SetEntryList(entryList);
 
-    TString fileName = Form("config/VertexLocation_run2384_cut%d_n%lld.txt",multCut,numEntries);
-    cout << fileName << endl;
-    ofstream fileVertexLocation(fileName);
+    TString fileNameVertexLocation = Form("config/VertexLocation_run2384_cut%d_n%lld.txt",multCut,numEntries);
+    TString fileNameEventArray = Form("config/EventArray_run2384_cut%d_n%lld.txt",multCut,numEntries);
+    cout << fileNameVertexLocation << " " << fileNameEventArray << endl;
+    ofstream fileVertexLocation(fileNameVertexLocation);
+    ofstream fileEventArray(fileNameEventArray);
 
     fileVertexLocation << "#RunNum   EventNum    x(mm)    y(mm)    z(mm)" << endl;
     for (auto iEntry=0; iEntry<numEntries; ++iEntry) {
@@ -48,5 +50,6 @@ void extract_run_event_vpos()
         tree108 -> LoadTree(entryNumber);
         tree108 -> GetEntry(entryNumber);
         fileVertexLocation << run << " " << event << " " << 0.1*raveVx << " " << 0.1*raveVy << " " << 0.1*raveVz << endl;
+        fileEventArray << event << endl;
     }
 }

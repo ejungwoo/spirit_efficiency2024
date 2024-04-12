@@ -1,4 +1,10 @@
-core-root.exe*
 data/
-*.root
+log/
+scripts/
 tt_*/
+
+*.root
+
+list_run*
+
+core-root.exe*

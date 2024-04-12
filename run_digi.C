@@ -13,7 +13,7 @@
  *   @ name : Name of simulation. Should be same with MC simulation.
  */
 
-void run_digi(TString name = "run_for_embedding_2024", double beamrate=-1, TString ParFile = "ST.parameters.par", bool simulateBeam = false)
+void run_digi(TString name = "gen_n1333__132_0__0_1_2", double beamrate=-1, TString ParFile = "ST.parameters.par", bool simulateBeam = false)
 {
   gRandom -> SetSeed(0);
 
@@ -87,7 +87,7 @@ void run_digi(TString name = "run_for_embedding_2024", double beamrate=-1, TStri
   TString inputFile   = dataDir + name + ".mc.root"; 
   TString outputFile  = dataDir + name + ".digi.root"; 
   TString mcParFile   = dataDir + name + ".params.root";
-  TString loggerFile  = dataDir + "log_" + name + ".digi.txt";
+  TString loggerFile  = dataDir + "log/log_" + name + ".digi.txt";
   TString digiParFile = workDir + "/parameters/" + ParFile;
 
 

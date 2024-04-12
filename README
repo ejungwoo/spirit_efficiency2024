@@ -1,6 +1,24 @@
-Creating efficiency
+# creating reconstruction root files
 
-1. proton track momentum
-2. geant4 simulation
-3. embed geant4 simulation to spirit exp. data
-4. read data
+cd /home/ejungwoo/RB230064/jhpark/efficiency2024
+
+root -q -b -l make_test_track.C # this will create following files
+### 1) MC generator input file ex) tt_system108/pid0/gen_examle.txt
+### 2) submission sctip that submit all job submission files ex) submit_all.sh
+### 3) Job submission files ex) submit_gen_examle.sh
+
+sh submit_all.sh # this will submit all job submission files such as submit_gen_examle.sh
+
+### job submission file such as submit_gen_examle.sh will run
+### run_mc.C >> example.mc.root
+### run_digi.C >> example.digi.root
+### run_reco_experiment_auto.C with mc file >> example.reco.embed.root
+
+run_reco_experiment_auto.C without mc file need to be run just once per run.
+
+
+
+
+# creating efficiency file
+
+...
